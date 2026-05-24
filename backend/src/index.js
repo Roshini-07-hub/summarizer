@@ -10,7 +10,24 @@ import { v4 as uuidv4 } from "uuid";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+const allowedOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+      if (!allowedOrigins.length || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS blocked: ${origin}`));
+    },
+    credentials: true,
+  }),
+);
 // Allow override via env and increase default to handle larger media metadata (but avoid large base64 payloads from client)
 const BODY_LIMIT = process.env.BODY_LIMIT || "200mb";
 app.use(express.json({ limit: BODY_LIMIT }));
