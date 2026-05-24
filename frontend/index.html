@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Content Summarizer</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header>
+        <h1>AI Content Summarizer</h1>
+        <p>Paste text or a URL, generate a summary, and save it to Pinecone.</p>
+      </header>
+
+      <section class="workspace">
+        <article class="tool-panel text-panel">
+          <div class="panel-heading">
+            <span class="panel-kicker">01</span>
+            <h2>Text Summary</h2>
+          </div>
+          <label>
+            Text to summarize
+            <textarea id="textInput" placeholder="Paste content here"></textarea>
+          </label>
+          <button id="textSummaryButton">Summarize Text</button>
+        </article>
+
+        <article class="tool-panel">
+          <div class="panel-heading">
+            <span class="panel-kicker">02</span>
+            <h2>File Summary</h2>
+          </div>
+          <label>
+            Upload file
+            <input id="fileInput" type="file" />
+          </label>
+          <label>
+            File context
+            <textarea id="fileDescription" placeholder="Add context for this file"></textarea>
+          </label>
+          <button id="fileSummaryButton">Summarize File</button>
+        </article>
+
+        <article class="tool-panel">
+          <div class="panel-heading">
+            <span class="panel-kicker">03</span>
+            <h2>URL Summary</h2>
+          </div>
+          <label>
+            URL to summarize
+            <input id="urlInput" placeholder="https://example.com/article" />
+          </label>
+          <button id="urlSummaryButton">Summarize URL</button>
+        </article>
+
+        <article class="tool-panel">
+          <div class="panel-heading">
+            <span class="panel-kicker">04</span>
+            <h2>Video Summary</h2>
+          </div>
+          <label>
+            Upload video
+            <input id="videoInput" type="file" accept="video/*" />
+          </label>
+          <label>
+            Video context
+            <textarea id="videoDescription" placeholder="Describe the video"></textarea>
+          </label>
+          <button id="videoSummaryButton">Summarize Video</button>
+        </article>
+
+        <article class="tool-panel">
+          <div class="panel-heading">
+            <span class="panel-kicker">05</span>
+            <h2>Audio Summary</h2>
+          </div>
+          <label>
+            Upload audio
+            <input id="audioInput" type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.mpeg,.mpg,.wma" />
+          </label>
+          <label>
+            Audio context
+            <textarea id="audioDescription" placeholder="Describe the audio"></textarea>
+          </label>
+          <button id="audioSummaryButton">Summarize Audio</button>
+        </article>
+      </section>
+
+      <section class="card result-card">
+        <h2>Summary</h2>
+        <div class="record-controls">
+          <button id="viewRecordsButton">View Saved Records</button>
+        </div>
+        <div id="summaryMeta" class="summary-meta"></div>
+        <pre id="summaryOutput" class="summary-output"></pre>
+        <div class="summary-actions">
+          <button id="copyButton">Copy Summary</button>
+          <button id="deleteSummaryButton" class="danger-button" disabled>Delete Summary</button>
+        </div>
+      </section>
+
+      <section class="card search-card">
+        <h2>Search saved summaries</h2>
+        <div class="search-row">
+          <input id="searchInput" placeholder="Search saved summaries" />
+          <button id="searchButton">Search</button>
+        </div>
+        <div id="searchResults" class="results-list"></div>
+      </section>
+
+      <div id="message" class="alert hidden"></div>
+    </main>
+
+    <script type="module" src="src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Summarizer</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="popup-shell">
+      <h1>AI Summarizer</h1>
+      <p>Summarize the current tab or paste text and send it to your backend.</p>
+
+      <label>
+        Backend URL
+        <input id="backendUrl" value="http://localhost:4000" />
+      </label>
+      <label>
+        API key (optional)
+        <input id="apiKey" placeholder="x-api-key value" />
+      </label>
+      <label>
+        Bearer token (optional)
+        <input id="authToken" placeholder="Bearer token" />
+      </label>
+
+      <button id="summarizePage">Summarize current page</button>
+      <label>
+        Manual text
+        <textarea id="manualText" placeholder="Paste text here"></textarea>
+      </label>
+      <button id="summarizeText">Summarize text</button>
+
+      <div id="status" class="status"></div>
+      <pre id="result" class="result"></pre>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

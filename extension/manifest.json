@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "AI Content Summarizer",
+  "version": "0.1.0",
+  "description": "Use the current tab URL or pasted text to summarize content with your AI backend.",
+  "permissions": ["activeTab"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
