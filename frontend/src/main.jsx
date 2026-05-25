@@ -1,6 +1,6 @@
 import "./styles.css";
 
-const API_BASE = (import.meta.env.VITE_API_BASE || "https://summarizer-backend-xi.vercel.app") + "/api";
+const API_BASE = (import.meta.env.VITE_API_BASE || "https://summarizer-backend-xi.vercel.app").replace(/\/$/, "") + "/api";
 
 const fields = {
   text: document.getElementById("textInput"),

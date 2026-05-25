@@ -15,12 +15,19 @@ const allowedOrigins = (process.env.CLIENT_URL || "")
   .map((o) => o.trim())
   .filter(Boolean);
 
+// Always allow the known frontend URLs as fallback
+const defaultOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://summarizer-frontend-wine.vercel.app",
+];
+const allAllowedOrigins = [...new Set([...defaultOrigins, ...allowedOrigins])];
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, Postman)
       if (!origin) return callback(null, true);
-      if (!allowedOrigins.length || allowedOrigins.includes(origin)) {
+      if (allAllowedOrigins.includes(origin)) {
         return callback(null, true);
       }
       return callback(new Error(`CORS blocked: ${origin}`));
