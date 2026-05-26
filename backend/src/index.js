@@ -7,9 +7,14 @@ import fs from "fs/promises";
 import { MongoClient } from "mongodb";
 import { v4 as uuidv4 } from "uuid";
 import { traceable } from "langsmith/traceable";
-import { wrapOpenAI } from "langsmith/wrappers";
 
 dotenv.config();
+
+// Ensure LangSmith env vars are mapped to LangChain SDK keys
+process.env.LANGCHAIN_TRACING_V2 = process.env.LANGSMITH_TRACING || "false";
+process.env.LANGCHAIN_ENDPOINT = process.env.LANGSMITH_ENDPOINT || "https://api.smith.langchain.com";
+process.env.LANGCHAIN_API_KEY = process.env.LANGSMITH_API_KEY || "";
+process.env.LANGCHAIN_PROJECT = process.env.LANGSMITH_PROJECT || "summarizer";
 
 const app = express();
 const allowedOrigins = (process.env.CLIENT_URL || "")
