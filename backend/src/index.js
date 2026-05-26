@@ -6,6 +6,8 @@ import crypto from "crypto";
 import fs from "fs/promises";
 import { MongoClient } from "mongodb";
 import { v4 as uuidv4 } from "uuid";
+import { traceable } from "langsmith/traceable";
+import { wrapOpenAI } from "langsmith/wrappers";
 
 dotenv.config();
 
@@ -247,7 +249,7 @@ const getFileNameFromUrl = (url) => {
   }
 };
 
-const getMediaSummary = async ({ fileName, fileType, fileSize, fileUrl, description }) => {
+const getMediaSummary = traceable(async ({ fileName, fileType, fileSize, fileUrl, description }) => {
   if (!groq) {
     throw new Error("GROQ_API_KEY is not configured. Please set it in backend/.env.");
   }
@@ -280,9 +282,9 @@ const getMediaSummary = async ({ fileName, fileType, fileSize, fileUrl, descript
     summary: raw || "Summary unavailable.",
     bullets: [],
   };
-};
+}, { name: "getMediaSummary", project_name: process.env.LANGSMITH_PROJECT || "summarizer" });
 
-const transcribeMedia = async ({ fileName, fileType, fileData }) => {
+const transcribeMedia = traceable(async ({ fileName, fileType, fileData }) => {
   if (!groq) {
     throw new Error("GROQ_API_KEY is not configured. Please set it in backend/.env.");
   }
@@ -331,14 +333,13 @@ const transcribeMedia = async ({ fileName, fileType, fileData }) => {
     console.log(`Transcription result (${text.split(/\s+/).length} words): ${text.slice(0, 120)}${text.length > 120 ? "..." : ""}`);
     return text;
   } catch (err) {
-    // Surface the real Groq error message instead of swallowing it
     const groqMessage = err?.error?.message || err?.message || String(err);
     console.error(`Groq transcription error: ${groqMessage}`);
     throw new Error(`Transcription failed: ${groqMessage}`);
   }
-};
+}, { name: "transcribeMedia", project_name: process.env.LANGSMITH_PROJECT || "summarizer" });
 
-const getSummary = async (content) => {
+const getSummary = traceable(async (content) => {
   const prompt = `Analyze the text below and return valid JSON only with these fields: title, summary, bullets.
 - title: a short, descriptive title (in English).
 - summary: a concise paragraph summary in English. If the source text is in another language (e.g. Tamil, Hindi, Spanish), translate and summarize it in English. Do NOT say the transcript is unclear or that translation is unavailable — always provide a meaningful summary based on the content.
@@ -365,7 +366,7 @@ ${content}`;
     summary: raw || content.slice(0, 400),
     bullets: [],
   };
-};
+}, { name: "getSummary", project_name: process.env.LANGSMITH_PROJECT || "summarizer" });
 
 const createEmbedding = async (text) => {
   if (!groq) {
